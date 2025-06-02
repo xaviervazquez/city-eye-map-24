@@ -1,6 +1,15 @@
 
+/**
+ * Static data for warehouse locations in the Inland Empire region
+ * This data represents the four test warehouses mentioned in the PRD
+ */
+
 import { Warehouse } from '../types/warehouse';
 
+/**
+ * Sample warehouse data for the MVP
+ * These are the four specific warehouses mentioned in the PRD requirements
+ */
 export const warehouseData: Warehouse[] = [
   {
     id: '1',
@@ -8,7 +17,7 @@ export const warehouseData: Warehouse[] = [
     address: '1000 E Alessandro BLVD Riverside, CA 92508',
     latitude: 33.8297,
     longitude: -117.3253,
-    status: 'upcoming',
+    status: 'upcoming',        // This is the main "proposed" project mentioned in PRD
     impactStat: '12% decrease in property value averaged'
   },
   {
@@ -17,7 +26,7 @@ export const warehouseData: Warehouse[] = [
     address: '224544 Alessandro Blvd Moreno Valley, CA 92553',
     latitude: 33.8289,
     longitude: -117.2845,
-    status: 'operating',
+    status: 'operating',       // Currently operational warehouse
     impactStat: '15% increase in truck traffic'
   },
   {
@@ -26,7 +35,7 @@ export const warehouseData: Warehouse[] = [
     address: '22360 Goldencrest Ave Moreno Valley, CA 92553',
     latitude: 33.8156,
     longitude: -117.2734,
-    status: 'in-construction',
+    status: 'in-construction', // Currently being built
     impactStat: '8% air quality decrease'
   },
   {
@@ -35,12 +44,16 @@ export const warehouseData: Warehouse[] = [
     address: '23900 Brodiaea Ave Moreno Valley, CA 92553',
     latitude: 33.8087,
     longitude: -117.2698,
-    status: 'dormant',
+    status: 'dormant',         // Not currently active
     impactStat: '5% noise increase during peak hours'
   }
 ];
 
+/**
+ * Default user location for testing purposes
+ * This is the validation address mentioned in the PRD: 14070 Barton St. Riverside, CA 92508
+ */
 export const defaultUserLocation = {
   latitude: 33.8303,
   longitude: -117.3289
-}; // 14070 Barton St. Riverside, CA 92508
+};
