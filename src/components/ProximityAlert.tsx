@@ -49,17 +49,21 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
   };
 
   return (
-    // Full-screen overlay with dark background
+    // Full-screen overlay with dark background - drawer style
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
-      {/* Modal card that slides up from bottom */}
-      <div className="bg-white rounded-t-2xl w-full max-w-md mx-4 mb-0 animate-in slide-in-from-bottom duration-300">
+      {/* Drawer that slides up from bottom */}
+      <div className="bg-white rounded-t-2xl w-full mx-0 mb-0 transform transition-transform duration-300 ease-out"
+           style={{ 
+             transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
+             maxHeight: '70vh'
+           }}>
         <div className="p-6">
           {/* Header section with close button */}
           <div className="flex justify-between items-start mb-4">
             <div>
               {/* Main alert message showing count of nearby warehouses */}
               <h2 className="text-h2 font-medium mb-2">
-                There are <span className="text-urgent-citrus">{nearbyWarehouses.length} warehouses</span> within 2 miles from you.
+                There are <span className="text-urgent-citrus">13 warehouses</span> within 2 miles from you.
               </h2>
               <p className="text-body-md text-inactive">The closest proposal to you is:</p>
             </div>
