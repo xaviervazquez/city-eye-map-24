@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import SimplifiedMapView from '../components/SimplifiedMapView';
+import MapView from '../components/MapView';
 import SearchBar from '../components/SearchBar';
 import ProximityAlert from '../components/ProximityAlert';
 import { warehouseData, defaultUserLocation } from '../data/warehouses';
@@ -102,8 +102,8 @@ const Index = () => {
       {/* Search bar positioned over the map */}
       <SearchBar onSearch={handleSearch} />
       
-      {/* Simplified map view with fixed user location and warehouse markers */}
-      <SimplifiedMapView
+      {/* ArcGIS map view with fixed user location and warehouse markers */}
+      <MapView
         userLocation={userLocation}
         warehouses={warehousesWithDistance}
         onMapLoad={handleMapLoad}

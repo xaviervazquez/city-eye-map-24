@@ -17,6 +17,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
   const mapDiv = useRef<HTMLDivElement>(null);    // Reference to the map container DOM element
   const mapRef = useRef<any>(null);               // Reference to the ArcGIS Map instance
   const [isMapLoaded, setIsMapLoaded] = useState(false);  // Track loading state
+  const [zoomLevel, setZoomLevel] = useState(12); // Track current zoom level
 
   useEffect(() => {
     if (!mapDiv.current) return;
@@ -41,11 +42,19 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
       const view = new MapView({
         container: mapDiv.current,
         map: map,
-        // Center on user location if available, otherwise use default coordinates
-        center: userLocation ? [userLocation.longitude, userLocation.latitude] : [-117.3289, 33.8303],
-        zoom: 13,                    // Zoom level (higher = more zoomed in)
+        // Center on fixed user location (no geolocation)
+        center: [userLocation.longitude, userLocation.latitude],
+        zoom: 12,                    // Zoom level focused on local area
+        // Constrain map to San Bernardino and Riverside County area
+        constraints: {
+          geometry: {
+            type: "extent",
+            xmin: -118.5, ymin: 33.3,  // Southwest corner
+            xmax: -116.0, ymax: 34.7   // Northeast corner (covers SB and Riverside counties)
+          }
+        },
         ui: {
-          components: ['zoom']       // Only show zoom controls, hide other UI elements
+          components: []             // Hide all default UI components (we'll add custom ones)
         }
       });
 
@@ -56,6 +65,11 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
         setIsMapLoaded(true);
         onMapLoad?.();            // Call parent callback if provided
         console.log('Map loaded successfully');
+      });
+
+      // Track zoom level changes
+      view.watch('zoom', (newZoom: number) => {
+        setZoomLevel(newZoom);
       });
 
       // Add user location marker if we have user's location
@@ -151,10 +165,93 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
     };
   }, [userLocation, warehouses, onMapLoad]);
 
+  /**
+   * Handle zoom controls
+   */
+  const handleZoomIn = () => {
+    if (mapRef.current) {
+      mapRef.current.goTo({
+        zoom: mapRef.current.zoom + 1
+      });
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (mapRef.current) {
+      mapRef.current.goTo({
+        zoom: mapRef.current.zoom - 1
+      });
+    }
+  };
+
+  const handleResetView = () => {
+    if (mapRef.current && userLocation) {
+      mapRef.current.goTo({
+        center: [userLocation.longitude, userLocation.latitude],
+        zoom: 12
+      });
+    }
+  };
+
   return (
     <div className="relative w-full h-screen">
       {/* Map container element */}
       <div ref={mapDiv} className="w-full h-full" />
+      
+      {/* Map Controls positioned below search bar */}
+      <div className="absolute top-20 right-4 z-30 flex flex-col space-y-2">
+        <button
+          onClick={handleZoomIn}
+          className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+          disabled={zoomLevel >= 18}
+        >
+          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+        
+        <button
+          onClick={handleZoomOut}
+          className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+          disabled={zoomLevel <= 8}
+        >
+          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+          </svg>
+        </button>
+        
+        <button
+          onClick={handleResetView}
+          className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+        >
+          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Map legend */}
+      <div className="absolute bottom-4 right-4 bg-white rounded-2xl p-4 shadow-lg">
+        <h3 className="text-label-sm font-medium mb-2">Warehouse Status</h3>
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-urgent-citrus rounded-sm"></div>
+            <span className="text-body-sm">Upcoming</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-urgent-blue rounded-sm"></div>
+            <span className="text-body-sm">In Construction</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-black rounded-sm"></div>
+            <span className="text-body-sm">Operating</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-inactive rounded-sm"></div>
+            <span className="text-body-sm">Dormant</span>
+          </div>
+        </div>
+      </div>
       
       {/* Loading overlay shown while map is initializing */}
       {!isMapLoaded && (
