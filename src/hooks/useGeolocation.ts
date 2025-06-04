@@ -1,13 +1,10 @@
-
 /**
  * Custom React hook for handling user geolocation with fallback
  * Attempts to get user's real location, falls back to demo location if denied/unavailable
  */
-
 import { useState, useEffect } from 'react';
 import { UserLocation } from '../types/warehouse';
 import { defaultUserLocation } from '../data/warehouses';
-
 /**
  * State interface for geolocation hook
  */
@@ -41,7 +38,6 @@ export function useGeolocation(): GeolocationState {
       });
       return;
     }
-
     // Watch user's position (updates if they move)
     const watchId = navigator.geolocation.watchPosition(
       // Success callback - user granted permission and we got their location

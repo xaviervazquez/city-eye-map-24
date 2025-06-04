@@ -1,4 +1,3 @@
-
 /**
  * Search bar component for searching warehouses by location or project name
  * Positioned absolutely at the top of the map view

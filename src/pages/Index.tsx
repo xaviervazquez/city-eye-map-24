@@ -1,4 +1,3 @@
-
 /**
  * Main page component that orchestrates the entire app experience
  * Uses fixed user location and displays warehouse data with proximity alerts
@@ -15,16 +14,16 @@ import { Warehouse } from '../types/warehouse';
 const Index = () => {
   // Use fixed user location (no geolocation for MVP)
   const userLocation = defaultUserLocation;
-  
+
   // State for warehouses with calculated distances (for map display)
   const [warehousesWithDistance, setWarehousesWithDistance] = useState<Warehouse[]>([]);
-  
+
   // State for warehouses within 2-mile proximity (for alert)
   const [nearbyWarehouses, setNearbyWarehouses] = useState<Warehouse[]>([]);
-  
+
   // State to control when proximity alert drawer is shown
   const [showProximityAlert, setShowProximityAlert] = useState(false);
-  
+
   // State to track when map has finished loading
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -40,7 +39,7 @@ const Index = () => {
       warehouseData,
       10 // Get all warehouses within 10 miles for map display
     );
-    
+
     // Get only warehouses within 2 miles for the proximity alert
     const nearby = getWarehousesWithinRadius(
       userLocation.latitude,
@@ -51,7 +50,7 @@ const Index = () => {
 
     setWarehousesWithDistance(warehousesWithDist);
     setNearbyWarehouses(nearby);
-    
+
     // Debug logging to track what warehouses are found
     console.log(`Found ${nearby.length} warehouses within 2 miles`);
     console.log('Nearby warehouses:', nearby);
@@ -87,7 +86,6 @@ const Index = () => {
   const handleCloseAlert = () => {
     setShowProximityAlert(false);
   };
-
   /**
    * Callback when map finishes loading
    */
@@ -95,20 +93,18 @@ const Index = () => {
     setMapLoaded(true);
     console.log('Map loaded callback triggered');
   };
-
   // Main app render with fixed user location
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Search bar positioned over the map */}
       <SearchBar onSearch={handleSearch} />
-      
+
       {/* ArcGIS map view with fixed user location and warehouse markers */}
       <MapView
         userLocation={userLocation}
         warehouses={warehousesWithDistance}
         onMapLoad={handleMapLoad}
       />
-
       {/* Proximity alert drawer (shows when warehouses found nearby) */}
       <ProximityAlert
         nearbyWarehouses={nearbyWarehouses}
