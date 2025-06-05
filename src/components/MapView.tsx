@@ -1,3 +1,4 @@
+
 /**
  * Interactive map component using ArcGIS API for JavaScript
  * Displays user location and warehouse markers with different styling based on status
@@ -7,7 +8,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Warehouse, UserLocation } from '../types/warehouse';
 
 interface MapViewProps {
-<<<<<<< HEAD
   userLocation: UserLocation | null;  // User's current location
   warehouses: Warehouse[];           // Array of warehouses to display
   onMapLoad?: () => void;           // Optional callback when map finishes loading
@@ -18,23 +18,11 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
   const mapRef = useRef<any>(null);               // Reference to the ArcGIS Map instance
   const [isMapLoaded, setIsMapLoaded] = useState(false);  // Track loading state
   const [zoomLevel, setZoomLevel] = useState(12); // Track current zoom level
-=======
-  userLocation: UserLocation | null;
-  warehouses: Warehouse[];
-  onMapLoad?: () => void;
-}
-
-const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }) => {
-  const mapDiv = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
->>>>>>> e9bba96 (Initial commit)
 
   useEffect(() => {
     if (!mapDiv.current) return;
 
     // Load required ArcGIS modules dynamically
-    // Load ArcGIS modules
     (window as any).require([
       'esri/Map',
       'esri/views/MapView',
@@ -44,7 +32,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
       'esri/symbols/PictureMarkerSymbol',
       'esri/PopupTemplate'
     ], (Map: any, MapView: any, Graphic: any, Point: any, SimpleMarkerSymbol: any, PictureMarkerSymbol: any, PopupTemplate: any) => {
-      
+
       // Create the map with street navigation basemap
       const map = new Map({
         basemap: 'streets-navigation-vector'
@@ -67,13 +55,6 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
         },
         ui: {
           components: []             // Hide all default UI components (we'll add custom ones)
-      const view = new MapView({
-        container: mapDiv.current,
-        map: map,
-        center: userLocation ? [userLocation.longitude, userLocation.latitude] : [-117.3289, 33.8303],
-        zoom: 13,
-        ui: {
-          components: ['zoom']
         }
       });
 
@@ -94,19 +75,10 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
       // Add user location marker if we have user's location
       if (userLocation) {
         // Create point geometry for user location
-      view.when(() => {
-        setIsMapLoaded(true);
-        onMapLoad?.();
-        console.log('Map loaded successfully');
-      });
-
-      // Add user location marker when available
-      if (userLocation) {
         const userPoint = new Point({
           longitude: userLocation.longitude,
           latitude: userLocation.latitude
         });
-
 
         // Create blue circle symbol for user location
         const userSymbol = new SimpleMarkerSymbol({
@@ -114,24 +86,15 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
           size: 12,
           outline: {
             color: [255, 255, 255, 1], // White outline
-
-        const userSymbol = new SimpleMarkerSymbol({
-          color: [33, 82, 234, 1], // urgent-blue
-          size: 12,
-          outline: {
-            color: [255, 255, 255, 1],
-
             width: 3
           }
         });
 
         // Create graphic combining geometry and symbol
-
         const userGraphic = new Graphic({
           geometry: userPoint,
           symbol: userSymbol
         });
-
 
         // Add user marker to the map
         view.graphics.add(userGraphic);
@@ -140,13 +103,6 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
       // Add warehouse markers for each warehouse in the array
       warehouses.forEach((warehouse) => {
         // Create point geometry for warehouse location
-
-        view.graphics.add(userGraphic);
-      }
-
-      // Add warehouse markers
-      warehouses.forEach((warehouse) => {
-
         const point = new Point({
           longitude: warehouse.longitude,
           latitude: warehouse.latitude
@@ -162,21 +118,12 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
             'in-construction': [33, 82, 234, 1], // urgent-blue
             'operating': [18, 18, 18, 1],       // black
             'dormant': [125, 123, 123, 1]       // inactive (gray)
-
-        const getWarehouseSymbol = (status: string) => {
-          const colors = {
-            'upcoming': [234, 88, 51, 1], // urgent-citrus
-            'in-construction': [33, 82, 234, 1], // urgent-blue
-            'operating': [18, 18, 18, 1], // black
-            'dormant': [125, 123, 123, 1] // inactive
-
           };
-          
+
           return new SimpleMarkerSymbol({
             color: colors[status as keyof typeof colors] || colors.operating,
             size: 10,
             outline: {
-
               color: [255, 255, 255, 1],  // White outline for visibility
               width: 2
             },
@@ -185,24 +132,16 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
         };
 
         // Create popup template that shows when user clicks on warehouse marker
-
-              color: [255, 255, 255, 1],
-              width: 2
-            },
-            style: 'square'
-          });
-        };
-
         const popupTemplate = new PopupTemplate({
           title: warehouse.name,
           content: `
-            <div style="padding: 8px;">
-              <p><strong>Status:</strong> ${warehouse.status.charAt(0).toUpperCase() + warehouse.status.slice(1).replace('-', ' ')}</p>
-              <p><strong>Address:</strong> ${warehouse.address}</p>
-              <p><strong>Impact:</strong> ${warehouse.impactStat}</p>
-              ${warehouse.distanceFromUser ? `<p><strong>Distance:</strong> ${warehouse.distanceFromUser.toFixed(1)} miles</p>` : ''}
-            </div>
-          `
+             <div style="padding: 8px;">
+               <p><strong>Status:</strong> ${warehouse.status.charAt(0).toUpperCase() + warehouse.status.slice(1).replace('-', ' ')}</p>
+               <p><strong>Address:</strong> ${warehouse.address}</p>
+               <p><strong>Impact:</strong> ${warehouse.impactStat}</p>
+               ${warehouse.distanceFromUser ? `<p><strong>Distance:</strong> ${warehouse.distanceFromUser.toFixed(1)} miles</p>` : ''}
+             </div>
+           `
         });
 
         // Create warehouse graphic with geometry, symbol, and popup
@@ -214,19 +153,11 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
         });
 
         // Add warehouse marker to the map
-        const warehouseGraphic = new Graphic({
-          geometry: point,
-          symbol: getWarehouseSymbol(warehouse.status),
-          attributes: warehouse,
-          popupTemplate: popupTemplate
-        });
-
         view.graphics.add(warehouseGraphic);
       });
     });
 
     // Cleanup function - destroy map when component unmounts
-    // Cleanup
     return () => {
       if (mapRef.current) {
         mapRef.current.destroy();
@@ -266,7 +197,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
     <div className="relative w-full h-screen">
       {/* Map container element */}
       <div ref={mapDiv} className="w-full h-full" />
-      
+
       {/* Map Controls positioned below search bar */}
       <div className="absolute top-20 right-4 z-30 flex flex-col space-y-2">
         <button
@@ -278,7 +209,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
         </button>
-        
+
         <button
           onClick={handleZoomOut}
           className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
@@ -288,7 +219,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
           </svg>
         </button>
-        
+
         <button
           onClick={handleResetView}
           className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
@@ -321,18 +252,12 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
           </div>
         </div>
       </div>
-      
+
       {/* Loading overlay shown while map is initializing */}
       {!isMapLoaded && (
         <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
           <div className="text-center">
             {/* Spinning loader */}
-  return (
-    <div className="relative w-full h-screen">
-      <div ref={mapDiv} className="w-full h-full" />
-      {!isMapLoaded && (
-        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-          <div className="text-center">
             <div className="w-8 h-8 border-4 border-urgent-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-body-md text-inactive">Loading map...</p>
           </div>

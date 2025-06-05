@@ -15,6 +15,8 @@ const Index = () => {
   // Use fixed user location (no geolocation for MVP)
   const userLocation = defaultUserLocation;
 
+  const [hasSeenProximityAlert, setHasSeenProximityAlert] = useState(false); //added to make sure alert only opens once
+
   // State for warehouses with calculated distances (for map display)
   const [warehousesWithDistance, setWarehousesWithDistance] = useState<Warehouse[]>([]);
 
@@ -65,7 +67,7 @@ const Index = () => {
     // 1. Map has finished loading
     // 2. We found warehouses within 2 miles
     // 3. Alert hasn't been shown yet
-    if (mapLoaded && nearbyWarehouses.length > 0 && !showProximityAlert) {
+    if (mapLoaded && nearbyWarehouses.length > 0 && !hasSeenProximityAlert) {
       setTimeout(() => {
         setShowProximityAlert(true);
       }, 1000); // Show alert 1 second after map loads for better UX
@@ -85,6 +87,7 @@ const Index = () => {
    */
   const handleCloseAlert = () => {
     setShowProximityAlert(false);
+    setHasSeenProximityAlert(true); // Prevents reopening
   };
   /**
    * Callback when map finishes loading
