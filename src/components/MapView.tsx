@@ -179,7 +179,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
 
       // Function to update warehouse label positions
       const updateWarehousePositions = () => {
-        if (!view) return;
+        if (!view || !view.ready) return;
         
         const positions = warehouses.map((warehouse) => {
           const point = {
@@ -190,10 +190,14 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
           // Convert lat/lng to screen coordinates
           const screenPoint = view.toScreen(point);
           
+          // Check if coordinates are valid, provide fallback if not
+          const x = (screenPoint && typeof screenPoint.x === 'number' && !isNaN(screenPoint.x)) ? screenPoint.x : 0;
+          const y = (screenPoint && typeof screenPoint.y === 'number' && !isNaN(screenPoint.y)) ? screenPoint.y : 0;
+          
           return {
             warehouse,
-            x: screenPoint.x,
-            y: screenPoint.y
+            x,
+            y
           };
         });
         
