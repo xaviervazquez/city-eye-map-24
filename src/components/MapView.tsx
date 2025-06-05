@@ -170,148 +170,86 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
         // Add polygon to the map
         view.graphics.add(polygonGraphic);
 
-        // Create status icon based on warehouse status
-        const getStatusIcon = (status: string) => {
-          const icons = {
-            'upcoming': '⚠️',
-            'in-construction': '🦺', // Hard hat emoji for in-construction
-            'operating': '⚙️',
-            'dormant': '⏸️'
-          };
-          return icons[status as keyof typeof icons] || '⚙️';
-        };
-
-        // Create HTML label element
-        const createLabel = () => {
-          const labelDiv = document.createElement('div');
-          labelDiv.style.cssText = `
-            position: absolute;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            padding: 8px 12px;
-            min-width: 200px;
-            pointer-events: auto;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            z-index: 1000;
-          `;
-
-          // Get status badge styling
-          const getStatusBadgeClass = (status: string) => {
-            const styles = {
-              'upcoming': 'background: #FEF3E2; border: 1px solid #EA5833; color: #EA5833;',
-              'in-construction': 'background: #EBF4FF; border: 1px solid #2152EA; color: #2152EA;',
-              'operating': 'background: #E5E7EB; border: 1px solid #9CA3AF; color: #374151;',
-              'dormant': 'background: #F3E8FF; border: 1px solid #A855F7; color: #A855F7;'
+        // Create text symbol for warehouse label
+        const createTextSymbol = (warehouse: Warehouse, zoom: number) => {
+          if (zoom >= 13) {
+            // Full label at high zoom
+            const getStatusBadgeColor = (status: string) => {
+              const colors = {
+                'upcoming': '#EA5833',
+                'in-construction': '#2152EA', 
+                'operating': '#374151',
+                'dormant': '#A855F7'
+              };
+              return colors[status as keyof typeof colors] || colors.operating;
             };
-            return styles[status as keyof typeof styles] || styles.operating;
-          };
 
-          const formatStatus = (status: string) => {
-            return status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
-          };
-
-          labelDiv.innerHTML = `
-            <div style="text-align: center;">
-              <div style="
-                font-weight: 600; 
-                font-size: 14px; 
-                margin-bottom: 6px; 
-                text-shadow: 0 0 3px #FEF3E2;
-                color: #1F2937;
-              ">
-                ${warehouse.name}
-              </div>
-              <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-                <span style="
-                  ${getStatusBadgeClass(warehouse.status)}
-                  padding: 4px 8px; 
-                  border-radius: 6px; 
-                  font-size: 12px; 
-                  font-weight: 500;
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                ">
-                  ${getStatusIcon(warehouse.status)} ${formatStatus(warehouse.status)}
-                </span>
-                <div style="
-                  ${getStatusBadgeClass(warehouse.status)}
-                  padding: 4px;
-                  border-radius: 4px;
-                  display: flex;
-                  align-items: center;
-                  cursor: pointer;
-                ">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m9 18 6-6-6-6"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          `;
-
-          return labelDiv;
-        };
-
-        // Create simple icon for zoomed out view
-        const createSimpleIcon = () => {
-          const iconDiv = document.createElement('div');
-          iconDiv.style.cssText = `
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            pointer-events: auto;
-            z-index: 1000;
-          `;
-
-          const getIconColor = (status: string) => {
-            const colors = {
-              'upcoming': 'background: #EA5833; color: white;',
-              'in-construction': 'background: #2152EA; color: white;',
-              'operating': 'background: #374151; color: white;',
-              'dormant': 'background: #A855F7; color: white;'
+            const formatStatus = (status: string) => {
+              return status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
             };
-            return colors[status as keyof typeof colors] || colors.operating;
-          };
 
-          iconDiv.style.cssText += getIconColor(warehouse.status);
-          iconDiv.innerHTML = getStatusIcon(warehouse.status);
+            return {
+              type: "text",
+              color: "#1F2937",
+              haloColor: "#FEF3E2",
+              haloSize: 2,
+              text: `${warehouse.name}\n[${formatStatus(warehouse.status)}]`,
+              xoffset: 0,
+              yoffset: 0,
+              font: {
+                size: 12,
+                family: "Arial",
+                weight: "bold"
+              }
+            };
+          } else {
+            // Simple icon at low zoom  
+            const getStatusIcon = (status: string) => {
+              const icons = {
+                'upcoming': '⚠️',
+                'in-construction': '🦺', // Hard hat emoji for in-construction
+                'operating': '⚙️',
+                'dormant': '⏸️'
+              };
+              return icons[status as keyof typeof icons] || '⚙️';
+            };
 
-          return iconDiv;
+            return {
+              type: "text",
+              color: "#FFFFFF",
+              text: getStatusIcon(warehouse.status),
+              xoffset: 0,
+              yoffset: 0,
+              font: {
+                size: 16,
+                family: "Arial"
+              }
+            };
+          }
         };
 
-        // Track current label state
-        let currentLabel: HTMLElement | null = null;
+        // Track current text graphic
+        let currentTextGraphic: any = null;
 
         // Function to update label based on zoom level
         const updateLabel = () => {
           const zoom = view.zoom;
           
-          // Remove existing label
-          if (currentLabel) {
-            view.ui.remove(currentLabel);
-            currentLabel = null;
+          // Remove existing text graphic
+          if (currentTextGraphic) {
+            view.graphics.remove(currentTextGraphic);
+            currentTextGraphic = null;
           }
 
-          // Add appropriate label based on zoom level
-          if (zoom >= 13) {
-            // Show full label at high zoom
-            currentLabel = createLabel();
-          } else {
-            // Show simple icon at low zoom
-            currentLabel = createSimpleIcon();
-          }
-
-          // Position label at warehouse location
-          view.ui.add(currentLabel, {
-            position: [warehouse.longitude, warehouse.latitude]
+          // Create new text graphic
+          const textSymbol = createTextSymbol(warehouse, zoom);
+          currentTextGraphic = new Graphic({
+            geometry: centerPoint,
+            symbol: textSymbol
           });
+
+          // Add text graphic to the map
+          view.graphics.add(currentTextGraphic);
         };
 
         // Initial label setup
