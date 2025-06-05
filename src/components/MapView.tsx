@@ -6,6 +6,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Warehouse, UserLocation } from '../types/warehouse';
+import WarehouseLabel from './WarehouseLabel';
 
 interface MapViewProps {
   userLocation: UserLocation | null;  // User's current location
@@ -18,6 +19,11 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
   const mapRef = useRef<any>(null);               // Reference to the ArcGIS Map instance
   const [isMapLoaded, setIsMapLoaded] = useState(false);  // Track loading state
   const [zoomLevel, setZoomLevel] = useState(12); // Track current zoom level
+  const [warehousePositions, setWarehousePositions] = useState<Array<{
+    warehouse: Warehouse;
+    x: number;
+    y: number;
+  }>>([]);
 
   useEffect(() => {
     if (!mapDiv.current) return;
@@ -169,98 +175,39 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
 
         // Add polygon to the map
         view.graphics.add(polygonGraphic);
+      });
 
-        // Create text symbol for warehouse label
-        const createTextSymbol = (warehouse: Warehouse, zoom: number) => {
-          if (zoom >= 13) {
-            // Full label at high zoom
-            const getStatusBadgeColor = (status: string) => {
-              const colors = {
-                'upcoming': '#EA5833',
-                'in-construction': '#2152EA', 
-                'operating': '#374151',
-                'dormant': '#A855F7'
-              };
-              return colors[status as keyof typeof colors] || colors.operating;
-            };
-
-            const formatStatus = (status: string) => {
-              return status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
-            };
-
-            return {
-              type: "text",
-              color: "#1F2937",
-              haloColor: "#FEF3E2",
-              haloSize: 2,
-              text: `${warehouse.name}\n[${formatStatus(warehouse.status)}]`,
-              xoffset: 0,
-              yoffset: 0,
-              font: {
-                size: 12,
-                family: "Arial",
-                weight: "bold"
-              }
-            };
-          } else {
-            // Simple icon at low zoom  
-            const getStatusIcon = (status: string) => {
-              const icons = {
-                'upcoming': '⚠️',
-                'in-construction': '🦺', // Hard hat emoji for in-construction
-                'operating': '⚙️',
-                'dormant': '⏸️'
-              };
-              return icons[status as keyof typeof icons] || '⚙️';
-            };
-
-            return {
-              type: "text",
-              color: "#FFFFFF",
-              text: getStatusIcon(warehouse.status),
-              xoffset: 0,
-              yoffset: 0,
-              font: {
-                size: 16,
-                family: "Arial"
-              }
-            };
-          }
-        };
-
-        // Track current text graphic
-        let currentTextGraphic: any = null;
-
-        // Function to update label based on zoom level
-        const updateLabel = () => {
-          const zoom = view.zoom;
+      // Function to update warehouse label positions
+      const updateWarehousePositions = () => {
+        if (!view) return;
+        
+        const positions = warehouses.map((warehouse) => {
+          const point = {
+            longitude: warehouse.longitude,
+            latitude: warehouse.latitude
+          };
           
-          // Remove existing text graphic
-          if (currentTextGraphic) {
-            view.graphics.remove(currentTextGraphic);
-            currentTextGraphic = null;
-          }
-
-          // Create new text graphic
-          const textSymbol = createTextSymbol(warehouse, zoom);
-          currentTextGraphic = new Graphic({
-            geometry: centerPoint,
-            symbol: textSymbol
-          });
-
-          // Add text graphic to the map
-          view.graphics.add(currentTextGraphic);
-        };
-
-        // Initial label setup
-        view.when(() => {
-          updateLabel();
+          // Convert lat/lng to screen coordinates
+          const screenPoint = view.toScreen(point);
           
-          // Update label when zoom changes
-          view.watch('zoom', () => {
-            updateLabel();
-          });
+          return {
+            warehouse,
+            x: screenPoint.x,
+            y: screenPoint.y
+          };
         });
+        
+        setWarehousePositions(positions);
+      };
+
+      // Update positions when view changes
+      view.when(() => {
+        updateWarehousePositions();
+        
+        // Update positions on pan/zoom/extent change
+        view.watch('extent', updateWarehousePositions);
+        view.watch('zoom', updateWarehousePositions);
+        view.watch('center', updateWarehousePositions);
       });
     });
 
@@ -304,6 +251,19 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
     <div className="relative w-full h-screen">
       {/* Map container element */}
       <div ref={mapDiv} className="w-full h-full" />
+
+      {/* Warehouse label overlays */}
+      {warehousePositions.map((position) => (
+        <WarehouseLabel
+          key={position.warehouse.id}
+          warehouse={position.warehouse}
+          isZoomedIn={zoomLevel >= 13}
+          style={{
+            left: position.x,
+            top: position.y,
+          }}
+        />
+      ))}
 
       {/* Map Controls positioned below search bar */}
       <div className="absolute top-20 right-4 z-30 flex flex-col space-y-2">
