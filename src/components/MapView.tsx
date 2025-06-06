@@ -248,7 +248,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
   };
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-full h-screen z-0">
       {/* Map container element */}
       <div ref={mapDiv} className="w-full h-full" />
 
