@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Warehouse } from '../types/warehouse';
 import { Badge } from './ui/badge';
 import { ChevronRight } from 'lucide-react';
@@ -14,6 +15,12 @@ interface WarehouseCardProps {
 }
 
 const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/warehouse/${warehouse.id}`);
+  };
+
   // Get warehouse image based on name
   const getWarehouseImage = (name: string) => {
     if (name.includes('Sycamore Hills')) {
@@ -32,7 +39,10 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
   const StatusIcon = statusConfig.icon;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center space-x-4">
+    <div 
+      className="bg-white rounded-lg border border-gray-200 p-4 flex items-center space-x-4 cursor-pointer hover:bg-gray-50 transition-colors"
+      onClick={handleCardClick}
+    >
       {/* Warehouse Image */}
       <img 
         src={getWarehouseImage(warehouse.name)}

@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Warehouse } from '../types/warehouse';
 import WarehouseCard from './WarehouseCard';
 
@@ -21,6 +22,8 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
   onClose,
   isVisible,
 }) => {
+  const navigate = useNavigate();
+  
   // Don't render anything if modal should be hidden or no closest warehouse
   if (!isVisible || !closestWarehouse) return null;
 
