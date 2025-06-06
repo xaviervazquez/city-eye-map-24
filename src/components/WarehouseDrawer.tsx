@@ -23,7 +23,9 @@ import WarehouseCard from './WarehouseCard';
 interface WarehouseDrawerProps {
   warehouses: Warehouse[];
   isOpen: boolean;
+  isExpanded: boolean;
   onClose: () => void;
+  onToggle: () => void;
 }
 
 type FilterOption = 'nearest' | 'impactful' | 'newest';
@@ -31,7 +33,9 @@ type FilterOption = 'nearest' | 'impactful' | 'newest';
 const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
   warehouses,
   isOpen,
-  onClose
+  isExpanded,
+  onClose,
+  onToggle
 }) => {
   const [filter, setFilter] = useState<FilterOption>('nearest');
 
@@ -73,8 +77,16 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>
-      <DrawerContent className="max-h-[70vh]">
-        <DrawerHeader className="pb-2">
+      <DrawerContent className={`${isExpanded ? 'max-h-[70vh]' : 'max-h-[180px]'} transition-all duration-300`}>
+        {/* Pull handle */}
+        <div className="flex justify-center pt-2 pb-2">
+          <div 
+            className="w-12 h-1 bg-gray-300 rounded-full cursor-pointer"
+            onClick={onToggle}
+          />
+        </div>
+        
+        <DrawerHeader className="pb-2" onClick={!isExpanded ? onToggle : undefined}>
           <DrawerTitle className="text-left text-xl font-semibold">
             In San Bernardino
           </DrawerTitle>
@@ -82,30 +94,44 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
             {warehouses.length} warehouses found
           </p>
           
-          {/* Filter Dropdown */}
-          <div className="mt-3 flex justify-start">
-            <Select value={filter} onValueChange={(value: FilterOption) => setFilter(value)}>
-              <SelectTrigger className="w-48 text-left">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="nearest">Nearest to you</SelectItem>
-                <SelectItem value="impactful">Most impactful</SelectItem>
-                <SelectItem value="newest">Newest project</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Filter Dropdown - only show when expanded */}
+          {isExpanded && (
+            <div className="mt-3 flex justify-start">
+              <Select value={filter} onValueChange={(value: FilterOption) => setFilter(value)}>
+                <SelectTrigger className="w-48 text-left">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="nearest">Nearest to you</SelectItem>
+                  <SelectItem value="impactful">Most impactful</SelectItem>
+                  <SelectItem value="newest">Newest project</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </DrawerHeader>
         
-        {/* Scrollable warehouse cards */}
-        <div className="px-4 pb-4 space-y-3 overflow-y-auto">
-          {sortedWarehouses.map((warehouse) => (
-            <WarehouseCard 
-              key={warehouse.id} 
-              warehouse={warehouse} 
-            />
-          ))}
-        </div>
+        {/* Content */}
+        {isExpanded ? (
+          /* Scrollable warehouse cards when expanded */
+          <div className="px-4 pb-4 space-y-3 overflow-y-auto">
+            {sortedWarehouses.map((warehouse) => (
+              <WarehouseCard 
+                key={warehouse.id} 
+                warehouse={warehouse} 
+              />
+            ))}
+          </div>
+        ) : (
+          /* Preview of first card when collapsed */
+          <div className="px-4 pb-4 overflow-hidden">
+            <div className="opacity-60">
+              <WarehouseCard 
+                warehouse={sortedWarehouses[0]} 
+              />
+            </div>
+          </div>
+        )}
       </DrawerContent>
     </Drawer>
   );

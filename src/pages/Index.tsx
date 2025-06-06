@@ -29,6 +29,9 @@ const Index = () => {
 
   // State to control warehouse drawer visibility
   const [showWarehouseDrawer, setShowWarehouseDrawer] = useState(false);
+  
+  // State to control warehouse drawer expansion
+  const [isDrawerExpanded, setIsDrawerExpanded] = useState(false);
 
   // State to track when map has finished loading
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -79,7 +82,7 @@ const Index = () => {
   }, [mapLoaded, nearbyWarehouses.length, showProximityAlert]);
 
   /**
-   * Effect: Show warehouse drawer after map loads
+   * Effect: Show warehouse drawer after map loads (collapsed)
    */
   useEffect(() => {
     if (mapLoaded && warehousesWithDistance.length > 0) {
@@ -135,7 +138,9 @@ const Index = () => {
       <WarehouseDrawer
         warehouses={warehousesWithDistance}
         isOpen={showWarehouseDrawer}
+        isExpanded={isDrawerExpanded}
         onClose={() => setShowWarehouseDrawer(false)}
+        onToggle={() => setIsDrawerExpanded(!isDrawerExpanded)}
       />
     </div>
   );

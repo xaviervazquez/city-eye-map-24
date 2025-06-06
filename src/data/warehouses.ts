@@ -44,7 +44,7 @@ export const warehouseData: Warehouse[] = [
     address: '23900 Brodiaea Ave Moreno Valley, CA 92553',
     latitude: 33.8087,
     longitude: -117.2698,
-    status: 'operating',
+    status: 'dormant',
     impactStat: '5% noise increase during peak hours'
   }
 ];

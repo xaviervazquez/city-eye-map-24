@@ -67,7 +67,7 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center space-x-4 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center space-x-4">
       {/* Warehouse Image */}
       <img 
         src={getWarehouseImage(warehouse.name)}
