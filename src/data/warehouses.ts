@@ -17,25 +17,25 @@ export const warehouseData: Warehouse[] = [
     address: '1000 E Alessandro BLVD Riverside, CA 92508',
     latitude: 33.8297,
     longitude: -117.3253,
-    status: 'upcoming',        // This is the main "proposed" project mentioned in PRD
+    status: 'upcoming',
     impactStat: '12% decrease in property value averaged'
   },
   {
     id: '2',
-    name: 'Elite Placement Solutions',
+    name: 'West Meridian Center',
     address: '224544 Alessandro Blvd Moreno Valley, CA 92553',
     latitude: 33.8289,
     longitude: -117.2845,
-    status: 'operating',       // Currently operational warehouse
+    status: 'upcoming',
     impactStat: '15% increase in truck traffic'
   },
   {
     id: '3',
-    name: 'National Tube Supply',
+    name: 'Bloomington Industrial Park',
     address: '22360 Goldencrest Ave Moreno Valley, CA 92553',
     latitude: 33.8156,
     longitude: -117.2734,
-    status: 'in-construction', // Currently being built
+    status: 'in-construction',
     impactStat: '8% air quality decrease'
   },
   {
@@ -44,7 +44,7 @@ export const warehouseData: Warehouse[] = [
     address: '23900 Brodiaea Ave Moreno Valley, CA 92553',
     latitude: 33.8087,
     longitude: -117.2698,
-    status: 'dormant',         // Not currently active
+    status: 'operating',
     impactStat: '5% noise increase during peak hours'
   }
 ];

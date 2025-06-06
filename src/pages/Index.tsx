@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import MapView from '../components/MapView';
 import SearchBar from '../components/SearchBar';
 import ProximityAlert from '../components/ProximityAlert';
+import WarehouseDrawer from '../components/WarehouseDrawer';
 import { warehouseData, defaultUserLocation } from '../data/warehouses';
 import { getWarehousesWithinRadius } from '../utils/distance';
 import { Warehouse } from '../types/warehouse';
@@ -25,6 +26,9 @@ const Index = () => {
 
   // State to control when proximity alert drawer is shown
   const [showProximityAlert, setShowProximityAlert] = useState(false);
+
+  // State to control warehouse drawer visibility
+  const [showWarehouseDrawer, setShowWarehouseDrawer] = useState(false);
 
   // State to track when map has finished loading
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -75,6 +79,17 @@ const Index = () => {
   }, [mapLoaded, nearbyWarehouses.length, showProximityAlert]);
 
   /**
+   * Effect: Show warehouse drawer after map loads
+   */
+  useEffect(() => {
+    if (mapLoaded && warehousesWithDistance.length > 0) {
+      setTimeout(() => {
+        setShowWarehouseDrawer(true);
+      }, 2000); // Show drawer 2 seconds after map loads
+    }
+  }, [mapLoaded, warehousesWithDistance.length]);
+
+  /**
    * Handle search functionality (placeholder for future implementation)
    */
   const handleSearch = (query: string) => {
@@ -114,6 +129,13 @@ const Index = () => {
         closestWarehouse={nearbyWarehouses[0] || null}  // First item is closest due to sorting
         onClose={handleCloseAlert}
         isVisible={showProximityAlert}
+      />
+
+      {/* Warehouse drawer */}
+      <WarehouseDrawer
+        warehouses={warehousesWithDistance}
+        isOpen={showWarehouseDrawer}
+        onClose={() => setShowWarehouseDrawer(false)}
       />
     </div>
   );
