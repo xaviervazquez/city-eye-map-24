@@ -48,9 +48,15 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
     return status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
   };
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     // Full-screen overlay with dark background - drawer style
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50" onClick={handleBackdropClick}>
       {/* Drawer that slides up from bottom */}
       <div 
         className="bg-white rounded-t-2xl w-full mx-0 mb-0 transform transition-transform duration-300 ease-out"
@@ -58,7 +64,6 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
           transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
           maxHeight: '70vh'
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6">
           {/* Header section with close button */}
