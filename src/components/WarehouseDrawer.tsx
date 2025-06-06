@@ -76,15 +76,21 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
   }, [warehouses, filter]);
 
   return (
-    <Drawer open={isOpen} modal={false} dismissible={false}>
-      <DrawerContent className={`${isExpanded ? 'max-h-[75vh]' : 'max-h-[180px]'} transition-all duration-300 z-40 pointer-events-auto ${!isExpanded ? 'shadow-lg border-border/50' : ''}`} style={{pointerEvents: isExpanded ? 'auto' : 'none'}}>
-        {/* Pull handle */}
-        <div className="flex justify-center pt-2 pb-2 pointer-events-auto">
-          <div 
-            className="w-12 h-1 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"
-            onClick={onToggle}
-          />
-        </div>
+    <>
+      {/* Overlay to block map interaction when drawer is expanded */}
+      {isExpanded && (
+        <div className="fixed inset-0 z-30 bg-transparent" />
+      )}
+      
+      <Drawer open={isOpen} modal={false} dismissible={false}>
+        <DrawerContent className={`${isExpanded ? 'max-h-[75vh]' : 'max-h-[180px]'} transition-all duration-300 z-40 pointer-events-auto ${!isExpanded ? 'shadow-lg border-border/50' : ''}`}>
+          {/* Pull handle */}
+          <div className="flex justify-center pt-2 pb-2">
+            <div 
+              className="w-12 h-1 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"
+              onClick={onToggle}
+            />
+          </div>
         
         <DrawerHeader className="pb-2" onClick={!isExpanded ? onToggle : undefined}>
           <DrawerTitle className="text-left text-xl font-semibold">
@@ -132,8 +138,9 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
             </div>
           </div>
         )}
-      </DrawerContent>
-    </Drawer>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 
