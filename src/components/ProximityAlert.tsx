@@ -64,6 +64,7 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
           transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
           maxHeight: '70vh'
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6">
           {/* Header section with close button */}
