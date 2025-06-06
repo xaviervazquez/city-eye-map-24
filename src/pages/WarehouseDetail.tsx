@@ -12,11 +12,13 @@ import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import EngageModal from '../components/EngageModal';
 
 const WarehouseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('health');
+  const [isEngageModalOpen, setIsEngageModalOpen] = useState(false);
 
   // Find the warehouse data
   const warehouse = warehouseData.find(w => w.id === id);
@@ -279,7 +281,12 @@ const WarehouseDetail = () => {
             <span className="mr-2">🤖</span>
             Ask your Builder
           </Button>
-          <Button variant="secondary-custom" size="sm" className="flex-shrink-0">
+          <Button 
+            variant="secondary-custom" 
+            size="sm" 
+            className="flex-shrink-0"
+            onClick={() => setIsEngageModalOpen(true)}
+          >
             <Bell className="w-4 h-4 mr-2" />
             Engage
           </Button>
@@ -289,6 +296,13 @@ const WarehouseDetail = () => {
           </Button>
         </div>
       </div>
+
+      {/* Engage Modal */}
+      <EngageModal 
+        warehouse={warehouse}
+        isOpen={isEngageModalOpen}
+        onClose={() => setIsEngageModalOpen(false)}
+      />
     </div>
   );
 };
