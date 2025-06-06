@@ -77,7 +77,7 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
 
   return (
     <Drawer open={isOpen} modal={false} dismissible={false}>
-      <DrawerContent className={`${isExpanded ? 'max-h-[80vh]' : 'max-h-[180px]'} transition-all duration-300 z-40`}>
+      <DrawerContent className={`${isExpanded ? 'max-h-[75vh]' : 'max-h-[180px]'} transition-all duration-300 z-40`}>
         {/* Pull handle */}
         <div className="flex justify-center pt-2 pb-2">
           <div 

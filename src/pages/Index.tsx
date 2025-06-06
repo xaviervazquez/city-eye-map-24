@@ -82,15 +82,15 @@ const Index = () => {
   }, [mapLoaded, nearbyWarehouses.length, showProximityAlert]);
 
   /**
-   * Effect: Show warehouse drawer after map loads (collapsed)
+   * Effect: Show warehouse drawer after map loads (collapsed) - only if alert is not visible
    */
   useEffect(() => {
-    if (mapLoaded && warehousesWithDistance.length > 0) {
+    if (mapLoaded && warehousesWithDistance.length > 0 && !showProximityAlert) {
       setTimeout(() => {
         setShowWarehouseDrawer(true);
       }, 2000); // Show drawer 2 seconds after map loads
     }
-  }, [mapLoaded, warehousesWithDistance.length]);
+  }, [mapLoaded, warehousesWithDistance.length, showProximityAlert]);
 
   /**
    * Handle search functionality (placeholder for future implementation)
@@ -106,10 +106,9 @@ const Index = () => {
   const handleCloseAlert = () => {
     setShowProximityAlert(false);
     setHasSeenProximityAlert(true); // Prevents reopening
-    // Ensure drawer collapses when alert is closed
-    if (isDrawerExpanded) {
-      setIsDrawerExpanded(false);
-    }
+    // Show warehouse drawer when alert is closed
+    setShowWarehouseDrawer(true);
+    setIsDrawerExpanded(false); // Ensure drawer starts collapsed
   };
   /**
    * Callback when map finishes loading
@@ -131,21 +130,25 @@ const Index = () => {
         onMapLoad={handleMapLoad}
       />
       {/* Proximity alert drawer (shows when warehouses found nearby) */}
-      <ProximityAlert
-        nearbyWarehouses={nearbyWarehouses}
-        closestWarehouse={nearbyWarehouses[0] || null}  // First item is closest due to sorting
-        onClose={handleCloseAlert}
-        isVisible={showProximityAlert}
-      />
+      {showProximityAlert && (
+        <ProximityAlert
+          nearbyWarehouses={nearbyWarehouses}
+          closestWarehouse={nearbyWarehouses[0] || null}  // First item is closest due to sorting
+          onClose={handleCloseAlert}
+          isVisible={showProximityAlert}
+        />
+      )}
 
-      {/* Warehouse drawer */}
-      <WarehouseDrawer
-        warehouses={warehousesWithDistance}
-        isOpen={showWarehouseDrawer}
-        isExpanded={isDrawerExpanded}
-        onClose={() => setShowWarehouseDrawer(false)}
-        onToggle={() => setIsDrawerExpanded(!isDrawerExpanded)}
-      />
+      {/* Warehouse drawer - only show when proximity alert is not visible */}
+      {!showProximityAlert && (
+        <WarehouseDrawer
+          warehouses={warehousesWithDistance}
+          isOpen={showWarehouseDrawer}
+          isExpanded={isDrawerExpanded}
+          onClose={() => setShowWarehouseDrawer(false)}
+          onToggle={() => setIsDrawerExpanded(!isDrawerExpanded)}
+        />
+      )}
     </div>
   );
 };
