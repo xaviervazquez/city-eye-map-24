@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Warehouse } from '../types/warehouse';
-import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
+import WarehouseCard from './WarehouseCard';
 
 interface ProximityAlertProps {
   nearbyWarehouses: Warehouse[];     // All warehouses within proximity radius
@@ -23,9 +23,6 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
 }) => {
   // Don't render anything if modal should be hidden or no closest warehouse
   if (!isVisible || !closestWarehouse) return null;
-
-  const statusConfig = getWarehouseStatusConfig(closestWarehouse.status);
-  const StatusIcon = statusConfig.icon;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -51,7 +48,7 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
             <div>
               {/* Main alert message showing count of nearby warehouses */}
               <h2 className="text-h2 font-medium mb-2">
-                There are <span className="text-urgent-citrus">13 warehouses</span> within 2 miles from you.
+                There are <span className="text-urgent-citrus">4 warehouses</span> within 2 miles from you.
               </h2>
               <p className="text-body-md text-inactive">The closest proposal to you is:</p>
             </div>
@@ -67,53 +64,8 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
           </div>
 
           {/* Warehouse details card */}
-          <div className="border border-border rounded-2xl p-4 mb-6">
-            <div className="flex items-start justify-between">
-              <div className="flex items-start space-x-3 flex-1">
-                {/* Warehouse icon */}
-                <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-inactive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-
-                <div className="flex-1">
-                  {/* Warehouse name */}
-                  <h3 className="text-body-md font-medium mb-1">{closestWarehouse.name}</h3>
-
-                  {/* Distance indicator */}
-                  <div className="flex items-center space-x-2 mb-2">
-                    <svg className="w-4 h-4 text-inactive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span className="text-body-sm text-inactive">
-                      about {Math.round((closestWarehouse.distanceFromUser || 0) * 5280)} feet from you
-                    </span>
-                  </div>
-
-                  {/* Status badge */}
-                  <div className="flex items-center justify-between">
-                    <div className={`flex items-center space-x-2 px-2 py-1 rounded-lg ${statusConfig.backgroundColor} ${statusConfig.borderColor} border`}>
-                      <StatusIcon className={`w-3 h-3 ${statusConfig.textColor}`} />
-                      <span className={`text-label-sm ${statusConfig.textColor}`}>
-                        {statusConfig.label}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Impact statistic */}
-                  <p className="text-body-sm text-inactive mt-2">{closestWarehouse.impactStat}</p>
-                </div>
-              </div>
-
-              {/* Arrow button for future expansion */}
-              <button className="ml-2 text-urgent-blue">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+          <div className="mb-6">
+            <WarehouseCard warehouse={closestWarehouse} />
           </div>
 
           {/* Close button */}
