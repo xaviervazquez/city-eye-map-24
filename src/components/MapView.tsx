@@ -297,28 +297,6 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
         </button>
       </div>
 
-      {/* Map legend */}
-      <div className="absolute bottom-4 right-4 bg-white rounded-2xl p-4 shadow-lg">
-        <h3 className="text-label-sm font-medium mb-2">Warehouse Status</h3>
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-urgent-citrus rounded-sm"></div>
-            <span className="text-body-sm">Upcoming</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-urgent-blue rounded-sm"></div>
-            <span className="text-body-sm">In Construction</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-black rounded-sm"></div>
-            <span className="text-body-sm">Operating</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-inactive rounded-sm"></div>
-            <span className="text-body-sm">Dormant</span>
-          </div>
-        </div>
-      </div>
 
       {/* Loading overlay shown while map is initializing */}
       {!isMapLoaded && (

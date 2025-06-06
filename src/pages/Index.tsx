@@ -106,6 +106,10 @@ const Index = () => {
   const handleCloseAlert = () => {
     setShowProximityAlert(false);
     setHasSeenProximityAlert(true); // Prevents reopening
+    // Ensure drawer collapses when alert is closed
+    if (isDrawerExpanded) {
+      setIsDrawerExpanded(false);
+    }
   };
   /**
    * Callback when map finishes loading

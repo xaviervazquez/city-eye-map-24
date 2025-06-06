@@ -50,13 +50,16 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
 
   return (
     // Full-screen overlay with dark background - drawer style
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50" onClick={onClose}>
       {/* Drawer that slides up from bottom */}
-      <div className="bg-white rounded-t-2xl w-full mx-0 mb-0 transform transition-transform duration-300 ease-out"
+      <div 
+        className="bg-white rounded-t-2xl w-full mx-0 mb-0 transform transition-transform duration-300 ease-out"
         style={{
           transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
           maxHeight: '70vh'
-        }}>
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="p-6">
           {/* Header section with close button */}
           <div className="flex justify-between items-start mb-4">
