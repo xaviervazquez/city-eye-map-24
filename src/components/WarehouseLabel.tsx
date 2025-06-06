@@ -54,7 +54,7 @@ const WarehouseLabel: React.FC<WarehouseLabelProps> = ({ warehouse, isZoomedIn, 
     // Simple icon view for zoomed out
     return (
       <div
-        className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20"
+        className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
         style={style}
       >
         <div className={`w-6 h-6 ${statusConfig.bgColor} ${statusConfig.borderColor} border rounded-md shadow-md flex items-center justify-center`}>
@@ -67,7 +67,7 @@ const WarehouseLabel: React.FC<WarehouseLabelProps> = ({ warehouse, isZoomedIn, 
   // Full card view for zoomed in
   return (
     <div
-      className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20"
+      className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
       style={style}
     >
       <div className="bg-white rounded-lg shadow-md border border-gray-200 p-3 min-w-48">
@@ -92,7 +92,7 @@ const WarehouseLabel: React.FC<WarehouseLabelProps> = ({ warehouse, isZoomedIn, 
           </div>
           
           {/* Circular chevron button */}
-          <div className={`w-6 h-6 ${statusConfig.bgColor} ${statusConfig.borderColor} border rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform`}>
+          <div className={`w-6 h-6 ${statusConfig.bgColor} ${statusConfig.borderColor} border rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform pointer-events-auto`}>
             <ChevronRight className={`w-3 h-3 ${statusConfig.textColor}`} />
           </div>
         </div>
