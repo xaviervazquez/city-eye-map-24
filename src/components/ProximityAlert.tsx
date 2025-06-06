@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { Warehouse } from '../types/warehouse';
+import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
 
 interface ProximityAlertProps {
   nearbyWarehouses: Warehouse[];     // All warehouses within proximity radius
@@ -23,30 +24,8 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
   // Don't render anything if modal should be hidden or no closest warehouse
   if (!isVisible || !closestWarehouse) return null;
 
-  /**
-   * Get appropriate background and text colors based on warehouse status
-   */
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'upcoming':
-        return 'text-urgent-citrus bg-soft-citrus';
-      case 'in-construction':
-        return 'text-urgent-blue bg-soft-blue';
-      case 'operating':
-        return 'text-black bg-border';
-      case 'dormant':
-        return 'text-inactive bg-gray-100';
-      default:
-        return 'text-black bg-border';
-    }
-  };
-
-  /**
-   * Format status text for display (capitalize and handle hyphens)
-   */
-  const formatStatus = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
-  };
+  const statusConfig = getWarehouseStatusConfig(closestWarehouse.status);
+  const StatusIcon = statusConfig.icon;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -115,10 +94,12 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
 
                   {/* Status badge */}
                   <div className="flex items-center justify-between">
-                    <span className={`px-2 py-1 rounded-lg text-label-sm ${getStatusColor(closestWarehouse.status)}`}>
-                      <span className="mr-1">⚠️</span>
-                      {formatStatus(closestWarehouse.status)}
-                    </span>
+                    <div className={`flex items-center space-x-2 px-2 py-1 rounded-lg ${statusConfig.backgroundColor} ${statusConfig.borderColor} border`}>
+                      <StatusIcon className={`w-3 h-3 ${statusConfig.textColor}`} />
+                      <span className={`text-label-sm ${statusConfig.textColor}`}>
+                        {statusConfig.label}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Impact statistic */}

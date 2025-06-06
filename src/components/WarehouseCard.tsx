@@ -7,6 +7,7 @@ import React from 'react';
 import { Warehouse } from '../types/warehouse';
 import { Badge } from './ui/badge';
 import { ChevronRight } from 'lucide-react';
+import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
 
 interface WarehouseCardProps {
   warehouse: Warehouse;
@@ -27,44 +28,8 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
     return '/images/warehouses/Warehouse-M.png'; // Default fallback
   };
 
-  // Get status badge styling based on warehouse status
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      'upcoming': {
-        variant: 'default' as const,
-        className: 'bg-urgent-citrus/10 text-urgent-citrus border-urgent-citrus',
-        icon: '⚠️',
-        label: 'Upcoming'
-      },
-      'in-construction': {
-        variant: 'default' as const,
-        className: 'bg-urgent-blue/10 text-urgent-blue border-urgent-blue',
-        icon: '🚧',
-        label: 'In construction'
-      },
-      'operating': {
-        variant: 'default' as const,
-        className: 'bg-gray-100 text-gray-700 border-gray-300',
-        icon: '⚪',
-        label: 'Operating'
-      },
-      'dormant': {
-        variant: 'default' as const,
-        className: 'bg-inactive/10 text-inactive border-inactive',
-        icon: '⚫',
-        label: 'Dormant'
-      }
-    };
-
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.operating;
-    
-    return (
-      <Badge variant={config.variant} className={`${config.className} gap-1 text-xs`}>
-        <span>{config.icon}</span>
-        {config.label}
-      </Badge>
-    );
-  };
+  const statusConfig = getWarehouseStatusConfig(warehouse.status);
+  const StatusIcon = statusConfig.icon;
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 flex items-center space-x-4">
@@ -87,7 +52,10 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
         
         {/* Status Badge */}
         <div className="mb-2">
-          {getStatusBadge(warehouse.status)}
+          <Badge variant="default" className={`${statusConfig.backgroundColor} ${statusConfig.textColor} ${statusConfig.borderColor} border gap-1 text-xs`}>
+            <StatusIcon className="w-3 h-3" />
+            {statusConfig.label}
+          </Badge>
         </div>
         
         {/* Distance and Impact */}
