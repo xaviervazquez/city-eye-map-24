@@ -26,7 +26,7 @@ export const warehouseData: Warehouse[] = [
     address: '224544 Alessandro Blvd Moreno Valley, CA 92553',
     latitude: 33.8289,
     longitude: -117.2845,
-    status: 'upcoming',
+    status: 'operating',
     impactStat: '15% increase in truck traffic'
   },
   {

@@ -3,7 +3,7 @@
  * Ensures consistent appearance across all components
  */
 
-import { AlertTriangle, Construction, Settings, Pause } from 'lucide-react';
+import { AlertTriangle, HardHat, Settings, Pause } from 'lucide-react';
 
 export interface WarehouseStatusConfig {
   icon: typeof AlertTriangle;
@@ -26,7 +26,7 @@ export const getWarehouseStatusConfig = (status: string): WarehouseStatusConfig 
       label: 'Upcoming'
     },
     'in-construction': {
-      icon: Construction,
+      icon: HardHat,
       textColor: 'text-urgent-blue',
       backgroundColor: 'bg-soft-blue',
       borderColor: 'border-urgent-blue',
