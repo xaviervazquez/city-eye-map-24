@@ -247,10 +247,29 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
     }
   };
 
+  // Ensure body and map container have proper pointer events
+  useEffect(() => {
+    // Force body to have pointer events
+    document.body.style.pointerEvents = 'auto';
+    
+    // Debug: Log current pointer events state
+    console.log('Body pointer events:', getComputedStyle(document.body).pointerEvents);
+    console.log('Map container pointer events:', mapDiv.current ? getComputedStyle(mapDiv.current).pointerEvents : 'no container');
+    
+    return () => {
+      // Cleanup: ensure body keeps pointer events on unmount
+      document.body.style.pointerEvents = 'auto';
+    };
+  }, []);
+
   return (
-    <div className="relative w-full h-screen z-0">
-      {/* Map container element */}
-      <div ref={mapDiv} className="w-full h-full" />
+    <div className="relative w-full h-screen z-0" style={{ pointerEvents: 'auto' }}>
+      {/* Map container element - explicitly enable pointer events */}
+      <div 
+        ref={mapDiv} 
+        className="w-full h-full" 
+        style={{ pointerEvents: 'auto' }}
+      />
 
       {/* Warehouse label overlays */}
       {warehousePositions.map((position) => (
