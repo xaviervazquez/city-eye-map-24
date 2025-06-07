@@ -30,7 +30,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           <img 
             src="/lovable-uploads/a821d037-ae31-49d1-b24f-bc9ff39128a1.png" 
             alt="Build Your City"
-            className="max-w-xs opacity-0 transition-opacity duration-300"
+            className="w-20 h-20 opacity-0 transition-opacity duration-300"
           />
         </div>
       </div>
@@ -44,7 +44,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
         <img 
           src="/lovable-uploads/a821d037-ae31-49d1-b24f-bc9ff39128a1.png" 
           alt="Build Your City"
-          className="max-w-xs mx-auto animate-scale-in"
+          className="w-20 h-20 mx-auto animate-scale-in"
           style={{
             animation: 'scale-in 0.6s ease-out'
           }}
