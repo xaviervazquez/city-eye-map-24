@@ -8,6 +8,7 @@ import MapView from '../components/MapView';
 import SearchBar from '../components/SearchBar';
 import ProximityAlert from '../components/ProximityAlert';
 import WarehouseDrawer from '../components/WarehouseDrawer';
+import SplashScreen from '../components/SplashScreen';
 import { warehouseData, defaultUserLocation } from '../data/warehouses';
 import { getWarehousesWithinRadius } from '../utils/distance';
 import { Warehouse } from '../types/warehouse';
@@ -16,6 +17,9 @@ const Index = () => {
   // Use fixed user location (no geolocation for MVP)
   const userLocation = defaultUserLocation;
 
+  // State to control splash screen visibility
+  const [showSplashScreen, setShowSplashScreen] = useState(true);
+  
   const [hasSeenProximityAlert, setHasSeenProximityAlert] = useState(false); //added to make sure alert only opens once
 
   // State for warehouses with calculated distances (for map display)
@@ -111,12 +115,24 @@ const Index = () => {
     setIsDrawerExpanded(false); // Ensure drawer starts collapsed
   };
   /**
+   * Handle splash screen completion
+   */
+  const handleSplashComplete = () => {
+    setShowSplashScreen(false);
+  };
+
+  /**
    * Callback when map finishes loading
    */
   const handleMapLoad = () => {
     setMapLoaded(true);
     console.log('Map loaded callback triggered');
   };
+  // Show splash screen first, then main app content
+  if (showSplashScreen) {
+    return <SplashScreen onComplete={handleSplashComplete} />;
+  }
+
   // Main app render with fixed user location
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
