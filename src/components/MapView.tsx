@@ -146,7 +146,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
             },
             'operating': {
               fill: [156, 163, 175, 0.1],    // gray-200 with low opacity
-              outline: [156, 163, 175, 1]    // gray-400 border
+              outline: [107, 114, 128, 1]    // gray-500 border for visibility
             },
             'dormant': {
               fill: [168, 85, 247, 0.1],     // soft-purple with low opacity
@@ -162,7 +162,7 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
             outline: {
               color: style.outline,
               width: 2,
-              style: "dash"
+              style: "solid"
             }
           };
         };

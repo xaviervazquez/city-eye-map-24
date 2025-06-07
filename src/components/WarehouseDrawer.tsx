@@ -79,17 +79,59 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
     <>
       {/* Overlay to block map interaction when drawer is expanded */}
       {isExpanded && (
-        <div className="fixed inset-0 z-30 bg-transparent" />
+        <div className="fixed inset-0 z-30 bg-transparent pointer-events-auto" />
       )}
       
       <Drawer open={isOpen} modal={false} dismissible={false}>
         <DrawerContent className={`${isExpanded ? 'max-h-[75vh]' : 'max-h-[180px]'} transition-all duration-300 z-40 pointer-events-auto ${!isExpanded ? 'shadow-lg border-border/50' : ''}`}>
           {/* Pull handle */}
-          <div className="flex justify-center pt-2 pb-2">
-            <div 
-              className="w-12 h-1 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"
-              onClick={onToggle}
-            />
+          <div 
+            className="flex justify-center pt-2 pb-2 cursor-pointer"
+            onClick={onToggle}
+            onMouseDown={(e) => {
+              const startY = e.clientY;
+              const threshold = 50; // pixels to drag before expanding
+              
+              const handleMouseMove = (moveEvent: MouseEvent) => {
+                const deltaY = startY - moveEvent.clientY;
+                if (deltaY > threshold && !isExpanded) {
+                  onToggle();
+                  document.removeEventListener('mousemove', handleMouseMove);
+                  document.removeEventListener('mouseup', handleMouseUp);
+                }
+              };
+              
+              const handleMouseUp = () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+              };
+              
+              document.addEventListener('mousemove', handleMouseMove);
+              document.addEventListener('mouseup', handleMouseUp);
+            }}
+            onTouchStart={(e) => {
+              const startY = e.touches[0].clientY;
+              const threshold = 50; // pixels to drag before expanding
+              
+              const handleTouchMove = (moveEvent: TouchEvent) => {
+                const deltaY = startY - moveEvent.touches[0].clientY;
+                if (deltaY > threshold && !isExpanded) {
+                  onToggle();
+                  document.removeEventListener('touchmove', handleTouchMove);
+                  document.removeEventListener('touchend', handleTouchEnd);
+                }
+              };
+              
+              const handleTouchEnd = () => {
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handleTouchEnd);
+              };
+              
+              document.addEventListener('touchmove', handleTouchMove);
+              document.addEventListener('touchend', handleTouchEnd);
+            }}
+          >
+            <div className="w-12 h-1 bg-gray-300 rounded-full hover:bg-gray-400 transition-colors" />
           </div>
         
         <DrawerHeader className="pb-2" onClick={!isExpanded ? onToggle : undefined}>

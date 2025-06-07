@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bell, Share } from 'lucide-react';
+import { ArrowLeft, Bell, Share, Heart, DollarSign, Bot } from 'lucide-react';
 import { warehouseData } from '../data/warehouses';
 import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
 import { Badge } from '../components/ui/badge';
@@ -94,7 +94,7 @@ const WarehouseDetail = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Warehouse Details</h1>
+          <h1 className="text-lg font-semibold">Warehouse details</h1>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ const WarehouseDetail = () => {
 
         {/* Builder Summary */}
         <div className="mb-6">
-          <h3 className="font-semibold mb-2">Builder Summary</h3>
+          <h3 className="font-semibold mb-2">Builder summary</h3>
           <p className="text-sm text-muted-foreground">
             This project is 16% larger than other projects nearby and is expected to create 400 packing jobs.
           </p>
@@ -141,11 +141,11 @@ const WarehouseDetail = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="health" className="flex items-center gap-2">
-              <span className="text-green-600">✓</span>
+              <Heart className="w-4 h-4" />
               Your health
             </TabsTrigger>
             <TabsTrigger value="money" className="flex items-center gap-2">
-              <span className="text-green-600">💰</span>
+              <DollarSign className="w-4 h-4" />
               Your money
             </TabsTrigger>
           </TabsList>
@@ -154,7 +154,7 @@ const WarehouseDetail = () => {
             {/* Traffic Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Traffic added to your streets</CardTitle>
+                <CardTitle className="text-base text-inactive">Traffic added to your streets</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold mb-2">{healthMetrics.traffic.value}</p>
@@ -167,7 +167,7 @@ const WarehouseDetail = () => {
             {/* Pollution Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Pollution added to your air, CO2</CardTitle>
+                <CardTitle className="text-base text-inactive">Pollution added to your air, CO2</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold mb-2">{healthMetrics.pollution.value}</p>
@@ -183,7 +183,7 @@ const WarehouseDetail = () => {
             {/* Noise Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Daily noise near your home</CardTitle>
+                <CardTitle className="text-base text-inactive">Daily noise near your home</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold mb-2">{healthMetrics.noise.value}</p>
@@ -196,7 +196,7 @@ const WarehouseDetail = () => {
             {/* Jobs Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Jobs created</CardTitle>
+                <CardTitle className="text-base text-inactive">Jobs created</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold mb-3">{moneyMetrics.jobs.value}</p>
@@ -216,7 +216,7 @@ const WarehouseDetail = () => {
             {/* Wage Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Wage for most jobs</CardTitle>
+                <CardTitle className="text-base text-inactive">Wage for most jobs</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold mb-2">{moneyMetrics.wage.value}</p>
@@ -229,7 +229,7 @@ const WarehouseDetail = () => {
             {/* Tax Card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Tax gain per year</CardTitle>
+                <CardTitle className="text-base text-inactive">Tax gain per year</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold mb-2">{moneyMetrics.tax.value}</p>
@@ -256,20 +256,17 @@ const WarehouseDetail = () => {
 
         {/* Ask Your Builder Q&A */}
         <div className="mb-6">
-          <h3 className="font-semibold mb-3 flex items-center gap-2">
-            Ask your Builder
-            <span className="text-red-500">💬</span>
-          </h3>
-          <div className="space-y-3">
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-sm">Where did you get this information?</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-sm">What is San Bernardino's plan to invest the tax revenue?</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-sm">Can I read the environmental report?</p>
-            </div>
+          <h3 className="font-semibold mb-3">Ask your Builder</h3>
+          <div className="space-y-2">
+            <Button variant="tertiary" size="sm" className="w-full justify-start text-left h-auto py-3">
+              Where did you get this information?
+            </Button>
+            <Button variant="tertiary" size="sm" className="w-full justify-start text-left h-auto py-3">
+              What is San Bernardino's plan to invest the tax revenue?
+            </Button>
+            <Button variant="tertiary" size="sm" className="w-full justify-start text-left h-auto py-3">
+              Can I read the environmental report?
+            </Button>
           </div>
         </div>
       </div>
@@ -278,7 +275,7 @@ const WarehouseDetail = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4">
         <div className="flex gap-3 overflow-x-auto">
           <Button variant="primary" size="sm" className="flex-shrink-0">
-            <span className="mr-2">🤖</span>
+            <Bot className="w-4 h-4 mr-2" />
             Ask your Builder
           </Button>
           <Button 

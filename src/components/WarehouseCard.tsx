@@ -7,7 +7,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Warehouse } from '../types/warehouse';
 import { Badge } from './ui/badge';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, MapPin, Activity } from 'lucide-react';
 import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
 
 interface WarehouseCardProps {
@@ -71,11 +71,11 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
         {/* Distance and Impact */}
         <div className="space-y-1">
           <p className="text-xs text-gray-600 flex items-center">
-            <span className="mr-1">📍</span>
+            <MapPin className="w-3 h-3 mr-1" />
             about {Math.round((warehouse.distanceFromUser || 0) * 5280)} feet from you
           </p>
           <p className="text-xs text-gray-600 flex items-center">
-            <span className="mr-1">📊</span>
+            <Activity className="w-3 h-3 mr-1" />
             {warehouse.impactStat}
           </p>
         </div>

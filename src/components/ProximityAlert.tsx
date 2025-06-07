@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { X } from 'lucide-react';
 import { Warehouse } from '../types/warehouse';
 import WarehouseCard from './WarehouseCard';
 
@@ -60,9 +61,7 @@ const ProximityAlert: React.FC<ProximityAlertProps> = ({
               onClick={onClose}
               className="text-inactive hover:text-black transition-colors"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="w-6 h-6" />
             </button>
           </div>
 

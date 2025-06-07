@@ -48,11 +48,11 @@ const EngageModal: React.FC<EngageModalProps> = ({
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent side="bottom" className="h-auto max-h-[90vh] overflow-y-auto">
-        <SheetHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <SheetTitle className="text-lg font-semibold">Engage</SheetTitle>
+        <SheetHeader className="flex flex-row items-center justify-center space-y-0 pb-4 relative">
+          <SheetTitle className="text-lg">Engage</SheetTitle>
           <button
             onClick={onClose}
-            className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
+            className="absolute right-0 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
           >
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
@@ -103,7 +103,7 @@ const EngageModal: React.FC<EngageModalProps> = ({
             <p className="text-sm text-muted-foreground mb-4">
               You can show up with a personalized report:
             </p>
-            <Button variant="primary" size="lg" className="w-full">
+            <Button variant="secondary-custom" size="lg" className="w-full">
               Start consultation →
             </Button>
           </div>
@@ -135,7 +135,7 @@ const EngageModal: React.FC<EngageModalProps> = ({
             >
               {hasRSVPd ? 'Going' : 'RSVP'}
             </Button>
-            <Button variant="secondary-custom" size="lg" className="flex-1">
+            <Button variant="tertiary" size="lg" className="flex-1">
               Email rep
             </Button>
           </div>
