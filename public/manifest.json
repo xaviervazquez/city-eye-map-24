@@ -1,0 +1,20 @@
+{
+  "name": "Build Your City",
+  "short_name": "BYC",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/bycicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/bycicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
