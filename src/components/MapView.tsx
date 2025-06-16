@@ -145,12 +145,12 @@ const MapView: React.FC<MapViewProps> = ({ userLocation, warehouses, onMapLoad }
               outline: [33, 82, 234, 1]      // urgent-blue border
             },
             'operating': {
-              fill: [156, 163, 175, 0.1],    // gray-200 with low opacity
-              outline: [107, 114, 128, 1]    // gray-500 border for visibility
+              fill: [34, 197, 94, 0.1],      // light green with low opacity
+              outline: [21, 128, 61, 1]      // dark green border
             },
             'dormant': {
-              fill: [168, 85, 247, 0.1],     // soft-purple with low opacity
-              outline: [168, 85, 247, 1]     // urgent-purple border
+              fill: [156, 163, 175, 0.1],    // light grey with low opacity
+              outline: [75, 85, 99, 1]       // dark grey border
             }
           };
 

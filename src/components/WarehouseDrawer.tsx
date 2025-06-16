@@ -90,11 +90,18 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
             onClick={onToggle}
             onMouseDown={(e) => {
               const startY = e.clientY;
-              const threshold = 50; // pixels to drag before expanding
+              const threshold = 50; // pixels to drag before expanding/collapsing
               
               const handleMouseMove = (moveEvent: MouseEvent) => {
                 const deltaY = startY - moveEvent.clientY;
+                // If drawer is collapsed and dragging up, expand it
                 if (deltaY > threshold && !isExpanded) {
+                  onToggle();
+                  document.removeEventListener('mousemove', handleMouseMove);
+                  document.removeEventListener('mouseup', handleMouseUp);
+                }
+                // If drawer is expanded and dragging down, collapse it
+                else if (deltaY < -threshold && isExpanded) {
                   onToggle();
                   document.removeEventListener('mousemove', handleMouseMove);
                   document.removeEventListener('mouseup', handleMouseUp);
@@ -111,11 +118,18 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
             }}
             onTouchStart={(e) => {
               const startY = e.touches[0].clientY;
-              const threshold = 50; // pixels to drag before expanding
+              const threshold = 50; // pixels to drag before expanding/collapsing
               
               const handleTouchMove = (moveEvent: TouchEvent) => {
                 const deltaY = startY - moveEvent.touches[0].clientY;
+                // If drawer is collapsed and dragging up, expand it
                 if (deltaY > threshold && !isExpanded) {
+                  onToggle();
+                  document.removeEventListener('touchmove', handleTouchMove);
+                  document.removeEventListener('touchend', handleTouchEnd);
+                }
+                // If drawer is expanded and dragging down, collapse it
+                else if (deltaY < -threshold && isExpanded) {
                   onToggle();
                   document.removeEventListener('touchmove', handleTouchMove);
                   document.removeEventListener('touchend', handleTouchEnd);
@@ -171,14 +185,8 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
             ))}
           </div>
         ) : (
-          /* Preview of first card when collapsed */
-          <div className="px-4 pb-4 overflow-hidden">
-            <div className="opacity-60">
-              <WarehouseCard 
-                warehouse={sortedWarehouses[0]} 
-              />
-            </div>
-          </div>
+          /* No preview when collapsed - just padding for proper spacing */
+          <div className="pb-4"></div>
         )}
         </DrawerContent>
       </Drawer>
