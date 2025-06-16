@@ -6,9 +6,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Warehouse } from '../types/warehouse';
-import { Badge } from './ui/badge';
 import { ChevronRight, MapPin, Activity } from 'lucide-react';
-import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
+import StatusBadge from './StatusBadge';
 
 interface WarehouseCardProps {
   warehouse: Warehouse;
@@ -35,8 +34,6 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
     return '/images/warehouses/Warehouse-M.png'; // Default fallback
   };
 
-  const statusConfig = getWarehouseStatusConfig(warehouse.status);
-  const StatusIcon = statusConfig.icon;
 
   return (
     <div 
@@ -62,10 +59,7 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({ warehouse }) => {
         
         {/* Status Badge */}
         <div className="mb-2">
-          <Badge variant="default" className={`${statusConfig.backgroundColor} ${statusConfig.textColor} ${statusConfig.borderColor} border gap-1 text-xs`}>
-            <StatusIcon className="w-3 h-3" />
-            {statusConfig.label}
-          </Badge>
+          <StatusBadge status={warehouse.status} />
         </div>
         
         {/* Distance and Impact */}

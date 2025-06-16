@@ -3,22 +3,22 @@
  * Includes health and financial impacts, developer info, and consultation CTAs
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell, Share, Heart, DollarSign, Bot } from 'lucide-react';
 import { warehouseData } from '../data/warehouses';
-import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
-import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import EngageModal from '../components/EngageModal';
+import StatusBadge from '../components/StatusBadge';
 
 const WarehouseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('health');
   const [isEngageModalOpen, setIsEngageModalOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Find the warehouse data
   const warehouse = warehouseData.find(w => w.id === id);
@@ -31,8 +31,6 @@ const WarehouseDetail = () => {
     );
   }
 
-  const statusConfig = getWarehouseStatusConfig(warehouse.status);
-  const StatusIcon = statusConfig.icon;
 
   // Get warehouse image based on name
   const getWarehouseImage = (name: string) => {
@@ -81,10 +79,21 @@ const WarehouseDetail = () => {
     }
   };
 
+  // Handle scroll for collapsible header
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Header with back button */}
-      <div className="sticky top-0 bg-white border-b border-border z-10">
+      {/* Sticky Header */}
+      <div className={`sticky top-0 bg-white border-b border-border z-10 transition-all duration-300 ${isScrolled ? 'shadow-sm' : ''}`}>
         <div className="flex items-center p-4">
           <Button
             variant="ghost"
@@ -94,13 +103,27 @@ const WarehouseDetail = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Warehouse details</h1>
+          <div className="flex-1">
+            {isScrolled ? (
+              /* Collapsed header content */
+              <div className="space-y-1">
+                <h1 className="text-lg font-semibold">{warehouse.name}</h1>
+                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                  <span>About {Math.round((warehouse.distanceFromUser || 0.21) * 5280)} feet from you</span>
+                  <span>•</span>
+                  <span>{warehouse.address}</span>
+                </div>
+              </div>
+            ) : (
+              <h1 className="text-lg font-semibold">Warehouse details</h1>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="px-4 pb-24">
-        {/* Warehouse Header */}
-        <div className="py-6">
+        {/* Warehouse Header - only show when not scrolled */}
+        <div className={`transition-all duration-300 ${isScrolled ? 'opacity-0 h-0 overflow-hidden' : 'py-6 opacity-100'}`}>
           <h1 className="text-2xl font-bold mb-2">{warehouse.name}</h1>
           <p className="text-sm text-muted-foreground mb-1">
             About {Math.round((warehouse.distanceFromUser || 0.21) * 5280)} feet from you
@@ -108,10 +131,7 @@ const WarehouseDetail = () => {
           <p className="text-sm text-muted-foreground mb-3">{warehouse.address}</p>
           
           {/* Status Badge */}
-          <Badge variant="default" className={`${statusConfig.backgroundColor} ${statusConfig.textColor} ${statusConfig.borderColor} border gap-1 text-xs w-fit`}>
-            <StatusIcon className="w-3 h-3" />
-            {statusConfig.label}
-          </Badge>
+          <StatusBadge status={warehouse.status} />
         </div>
 
         {/* Developer + Size Section */}
