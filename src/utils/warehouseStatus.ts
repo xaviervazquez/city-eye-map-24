@@ -23,28 +23,28 @@ export const getWarehouseStatusConfig = (status: string): WarehouseStatusConfig 
       textColor: 'text-urgent-citrus',
       backgroundColor: 'bg-soft-citrus',
       borderColor: 'border-urgent-citrus',
-      label: 'Upcoming'
+      label: 'In proposal'
     },
     'in-construction': {
       icon: HardHat,
       textColor: 'text-urgent-blue',
       backgroundColor: 'bg-soft-blue',
       borderColor: 'border-urgent-blue',
-      label: 'In Construction'
+      label: 'In construction'
     },
     'operating': {
       icon: Settings,
-      textColor: 'text-black',
-      backgroundColor: 'bg-border',
-      borderColor: 'border-border',
-      label: 'Operating'
+      textColor: 'text-green-700',
+      backgroundColor: 'bg-green-100',
+      borderColor: 'border-green-600',
+      label: 'Active'
     },
     'dormant': {
       icon: Pause,
-      textColor: 'text-urgent-purple',
-      backgroundColor: 'bg-soft-purple',
-      borderColor: 'border-urgent-purple',
-      label: 'Dormant'
+      textColor: 'text-gray-600',
+      backgroundColor: 'bg-gray-100',
+      borderColor: 'border-gray-500',
+      label: 'Not active'
     }
   };
 
