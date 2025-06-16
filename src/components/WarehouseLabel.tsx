@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Warehouse } from '../types/warehouse';
 import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
+import StatusBadge from './StatusBadge';
 
 interface WarehouseLabelProps {
   warehouse: Warehouse;
@@ -47,17 +48,7 @@ const WarehouseLabel: React.FC<WarehouseLabelProps> = ({ warehouse, isZoomedIn, 
         {/* Status badge and chevron button on same line */}
         <div className="flex items-center space-x-2">
           {/* Status badge with shadow */}
-          <div 
-            className={`flex items-center space-x-1 px-2 py-1 rounded-md ${statusConfig.backgroundColor} ${statusConfig.borderColor} border`}
-            style={{
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
-            }}
-          >
-            <StatusIcon className={`w-3 h-3 ${statusConfig.textColor}`} />
-            <span className={`text-xs font-medium ${statusConfig.textColor}`}>
-              {statusConfig.label}
-            </span>
-          </div>
+          <StatusBadge status={warehouse.status} showShadow />
           
           {/* Circular chevron button with shadow */}
           <div 

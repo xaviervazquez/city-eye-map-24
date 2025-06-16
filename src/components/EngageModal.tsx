@@ -4,12 +4,10 @@
  */
 
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
 import { Warehouse } from '../types/warehouse';
-import { getWarehouseStatusConfig } from '../utils/warehouseStatus';
-import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
+import StatusBadge from './StatusBadge';
 
 interface EngageModalProps {
   warehouse: Warehouse;
@@ -23,9 +21,6 @@ const EngageModal: React.FC<EngageModalProps> = ({
   onClose,
 }) => {
   const [hasRSVPd, setHasRSVPd] = useState(false);
-
-  const statusConfig = getWarehouseStatusConfig(warehouse.status);
-  const StatusIcon = statusConfig.icon;
 
   // Get warehouse image based on name
   const getWarehouseImage = (name: string) => {
@@ -47,16 +42,9 @@ const EngageModal: React.FC<EngageModalProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="bottom" className="h-auto max-h-[90vh] overflow-y-auto">
-        <SheetHeader className="flex flex-row items-center justify-center space-y-0 pb-4 relative">
+      <SheetContent side="bottom" className="h-auto max-h-[90vh] overflow-y-auto pb-20">
+        <SheetHeader className="flex flex-row items-center justify-center space-y-0 pb-4">
           <SheetTitle className="text-lg">Engage</SheetTitle>
-          <button
-            onClick={onClose}
-            className="absolute right-0 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </button>
         </SheetHeader>
 
         <div className="space-y-6 pb-6">
@@ -69,10 +57,7 @@ const EngageModal: React.FC<EngageModalProps> = ({
             />
             <div className="flex-1 min-w-0">
               <h2 className="text-xl font-semibold mb-2">{warehouse.name}</h2>
-              <Badge variant="default" className={`${statusConfig.backgroundColor} ${statusConfig.textColor} ${statusConfig.borderColor} border gap-1 text-xs mb-2 w-fit`}>
-                <StatusIcon className="w-3 h-3" />
-                {statusConfig.label}
-              </Badge>
+              <StatusBadge status={warehouse.status} className="mb-2" />
               <p className="text-sm text-muted-foreground">
                 about {Math.round((warehouse.distanceFromUser || 0.21) * 5280)} feet from you • {warehouse.address.split(',')[0]}
               </p>
@@ -120,8 +105,10 @@ const EngageModal: React.FC<EngageModalProps> = ({
               </Button>
             </div>
           </div>
+        </div>
 
-          {/* Action Buttons */}
+        {/* Sticky Action Buttons */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4">
           <div className="flex gap-3">
             <Button
               variant={hasRSVPd ? "secondary" : "primary"}
