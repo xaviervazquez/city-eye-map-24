@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import WarehouseDetail from "./pages/WarehouseDetail";
 import DataExplorer from "./components/DataExplorer";
 import DataMapper from "./components/DataMapper";
+import PublicDataResearch from "./components/PublicDataResearch";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/warehouse/:id" element={<WarehouseDetail />} />
           <Route path="/data-explorer" element={<DataExplorer />} />
           <Route path="/data-mapper" element={<DataMapper />} />
+          <Route path="/public-data-research" element={<PublicDataResearch />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
