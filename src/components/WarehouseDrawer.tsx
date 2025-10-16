@@ -150,7 +150,7 @@ const WarehouseDrawer: React.FC<WarehouseDrawerProps> = ({
         
         <DrawerHeader className="pb-2" onClick={!isExpanded ? onToggle : undefined}>
           <DrawerTitle className="text-left text-xl font-semibold">
-            In San Bernardino
+            In Riverside
           </DrawerTitle>
           <p className="text-left text-urgent-citrus text-sm font-medium">
             {warehouses.length} warehouses found

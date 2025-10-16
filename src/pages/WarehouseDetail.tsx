@@ -98,7 +98,7 @@ const WarehouseDetail = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/')}
             className="mr-3"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -294,18 +294,18 @@ const WarehouseDetail = () => {
       {/* Sticky Bottom Button Row */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4">
         <div className="flex gap-3 overflow-x-auto">
-          <Button variant="primary" size="sm" className="flex-shrink-0">
-            <Bot className="w-4 h-4 mr-2" />
-            Ask your Builder
-          </Button>
           <Button 
-            variant="secondary-custom" 
+            variant="primary" 
             size="sm" 
             className="flex-shrink-0"
             onClick={() => setIsEngageModalOpen(true)}
           >
             <Bell className="w-4 h-4 mr-2" />
             Engage
+          </Button>
+          <Button variant="secondary-custom" size="sm" className="flex-shrink-0 rounded-none">
+            <Bot className="w-4 h-4 mr-2" />
+            Ask your Builder
           </Button>
           <Button variant="tertiary" size="sm" className="flex-shrink-0">
             <Share className="w-4 h-4 mr-2" />
