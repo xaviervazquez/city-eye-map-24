@@ -22,10 +22,10 @@ export const warehouseData: Warehouse[] = [
   },
   {
     id: '2',
-    name: 'West Meridian Center',
+    name: 'Burlington Distribution Center',
     address: '3850 Van Buren Blvd, Riverside, CA 92503',
     latitude: 33.9055,
-    longitude: -117.2945,
+    longitude: -117.2990,
     status: 'operating',
     impactStat: '15% increase in truck traffic'
   },
@@ -42,8 +42,8 @@ export const warehouseData: Warehouse[] = [
     id: '4',
     name: 'Amazon Fresh',
     address: '3950 Chicago Ave, Riverside, CA 92507',
-    latitude: 33.9040,
-    longitude: -117.2960,
+    latitude: 33.9085,
+    longitude: -117.2975,
     status: 'dormant',
     impactStat: '5% noise increase during peak hours'
   }
