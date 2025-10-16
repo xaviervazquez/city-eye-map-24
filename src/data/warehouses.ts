@@ -13,37 +13,37 @@ import { Warehouse } from '../types/warehouse';
 export const warehouseData: Warehouse[] = [
   {
     id: '1',
-    name: 'Sycamore Hills Distribution Center',
-    address: '1000 E Alessandro BLVD Riverside, CA 92508',
-    latitude: 33.8297,
-    longitude: -117.3253,
+    name: 'Meridian Park West',
+    address: 'Linebacker Rd, Riverside, CA 92508',
+    latitude: 33.9068611,
+    longitude: -117.2916944,
     status: 'upcoming',
     impactStat: '12% decrease in property value averaged'
   },
   {
     id: '2',
     name: 'West Meridian Center',
-    address: '224544 Alessandro Blvd Moreno Valley, CA 92553',
-    latitude: 33.8289,
-    longitude: -117.2845,
+    address: '3850 Van Buren Blvd, Riverside, CA 92503',
+    latitude: 33.9055,
+    longitude: -117.2945,
     status: 'operating',
     impactStat: '15% increase in truck traffic'
   },
   {
     id: '3',
     name: 'Bloomington Industrial Park',
-    address: '22360 Goldencrest Ave Moreno Valley, CA 92553',
-    latitude: 33.8156,
-    longitude: -117.2734,
+    address: '4200 Pierce St, Riverside, CA 92505',
+    latitude: 33.9095,
+    longitude: -117.2890,
     status: 'in-construction',
     impactStat: '8% air quality decrease'
   },
   {
     id: '4',
     name: 'Amazon Fresh',
-    address: '23900 Brodiaea Ave Moreno Valley, CA 92553',
-    latitude: 33.8087,
-    longitude: -117.2698,
+    address: '3950 Chicago Ave, Riverside, CA 92507',
+    latitude: 33.9040,
+    longitude: -117.2960,
     status: 'dormant',
     impactStat: '5% noise increase during peak hours'
   }
@@ -51,9 +51,9 @@ export const warehouseData: Warehouse[] = [
 
 /**
  * Default user location for testing purposes
- * This is the validation address mentioned in the PRD: 14070 Barton St. Riverside, CA 92508
+ * Located approximately 351 feet from Meridian Park West in Riverside, CA
  */
 export const defaultUserLocation = {
-  latitude: 33.8303,
-  longitude: -117.3289
+  latitude: 33.9055,
+  longitude: -117.2930
 };
