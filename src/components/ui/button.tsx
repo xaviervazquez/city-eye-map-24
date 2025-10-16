@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         // New custom variants for the app
-        primary: "bg-black text-white hover:bg-gray-900 rounded-lg",
+        primary: "bg-black text-white hover:bg-gray-900 rounded-none",
         "secondary-custom": "bg-soft-citrus border border-urgent-citrus text-urgent-citrus hover:bg-[#fff7f3]",
         tertiary: "bg-white text-urgent-citrus hover:bg-gray-50",
       },
